@@ -28,6 +28,7 @@
         android:layout_height="46dp"
         android:layout_marginLeft="92dp"
         android:layout_marginTop="48dp"
+
         android:backgroundTint="@color/colorPrimaryDark"
         android:hint="Type name here"
         android:inputType="textEmailAddress"
@@ -49,21 +50,31 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="139dp"
+        android:paddingTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.805">
+
         <ProgressBar
             android:id="@+id/progressBar"
+            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:indeterminate="true"
-            android:layout_centerHorizontal="true"
             android:visibility="gone" />
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/responseView"
+                style="@style/TextColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </ScrollView>

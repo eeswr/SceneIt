@@ -38,7 +38,7 @@ public class SearchActivity extends Activity {
     EditText filmText;
 
     static final String API_KEY = "b1d7abb033c99a90dd0af6fab8471e1c";
-    static final String API_URL = "https://api.themoviedb.org/3";
+    static final String API_URL = "https://api.themoviedb.org/3/search/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class SearchActivity extends Activity {
             // Do some validation here
 
             try {
-                URL url = new URL(API_URL + "company?" + "api_key=" + API_KEY + "&query=" + film);
+                URL url = new URL(API_URL + "movie?" + "api_key=" + API_KEY + "language=en-US&query=" + film + "&page=1&include_adult=false");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

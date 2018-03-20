@@ -22,4 +22,10 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         startActivity(intent);
     }
+
+    public void buttonClickMaps(View v)
+    {
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        startActivity(intent);
+    }
 }
