@@ -35,61 +35,66 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.226" />
 
-    <Button
+
+    <ImageButton
         android:id="@+id/button2"
-        android:background="@drawable/rounded_button"
-        style="@style/TextColor"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:text="Organise Movie Dates"
+        android:background="@drawable/rounded_button"
+        app:srcCompat="@drawable/calendar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.827"
+        app:layout_constraintHorizontal_bias="0.877"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.796" />
+        app:layout_constraintVertical_bias="0.871"/>
 
-    <Button
-        android:id="@+id/button3"
-        android:background="@drawable/rounded_button"
-        style="@style/TextColor"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:text="View Saved Films"
+    <ImageButton
+    android:id="@+id/button3"
+    android:layout_width="140dp"
+    android:layout_height="140dp"
+    android:onClick="buttonClickSearch"
+    android:background="@drawable/rounded_button"
+    app:srcCompat="@drawable/list"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.827"
+        app:layout_constraintHorizontal_bias="0.877"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.44" />
+        app:layout_constraintVertical_bias="0.44"/>
 
-    <Button
+
+
+    <ImageButton
         android:id="@+id/button4"
-        android:background="@drawable/rounded_button"
-        style="@style/TextColor"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:text="Search Films"
+        android:onClick="buttonClickSearch"
+        android:background="@drawable/rounded_button"
+        app:srcCompat="@drawable/loupe"
+        tools:layout_editor_absoluteX="66dp"
+        tools:layout_editor_absoluteY="71dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.44"
-        android:onClick="buttonClickSearch"/>
+        app:layout_constraintVertical_bias="0.44"/>
 
-    <Button
+
+
+    <ImageButton
         android:id="@+id/button5"
-        android:background="@drawable/rounded_button"
-        style="@style/TextColor"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:text="Find Cinemas"
+        android:onClick="buttonClickMaps"
+        android:background="@drawable/rounded_button"
+        app:srcCompat="@drawable/map_location"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.796"
-        android:onClick="buttonClickMaps"/>
+        app:layout_constraintVertical_bias="0.871"/>
+
 </android.support.constraint.ConstraintLayout>
