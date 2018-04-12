@@ -77,7 +77,7 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="desc_google_icon">Google Logo</string>
-    <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="signed_in_fmt">Signed in as %s</string>
     <string name="enter">Enter</string>
 
     <string name="latitude_label">Latitude</string>

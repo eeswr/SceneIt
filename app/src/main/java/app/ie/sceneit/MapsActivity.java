@@ -1,10 +1,16 @@
 package app.ie.sceneit;
 
+        import android.location.Criteria;
         import android.location.Location;
         import android.os.Bundle;
         import android.support.v4.app.ActivityCompat;
         import android.support.v4.app.FragmentActivity;
+        import android.util.Log;
         import android.widget.Toast;
+
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.toolbox.JsonObjectRequest;
         import com.google.android.gms.common.ConnectionResult;
         import com.google.android.gms.common.api.GoogleApiClient;
         import com.google.android.gms.location.FusedLocationProviderClient;
@@ -17,7 +23,29 @@ package app.ie.sceneit;
         import com.google.android.gms.maps.model.LatLng;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.android.gms.tasks.OnSuccessListener;
+
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
         import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+        import static app.ie.sceneit.MapConfig.GEOMETRY;
+        import static app.ie.sceneit.MapConfig.GOOGLE_BROWSER_API_KEY;
+        import static app.ie.sceneit.MapConfig.ICON;
+        import static app.ie.sceneit.MapConfig.LATITUDE;
+        import static app.ie.sceneit.MapConfig.LOCATION;
+        import static app.ie.sceneit.MapConfig.LONGITUDE;
+        import static app.ie.sceneit.MapConfig.MIN_DISTANCE_CHANGE_FOR_UPDATES;
+        import static app.ie.sceneit.MapConfig.MIN_TIME_BW_UPDATES;
+        import static app.ie.sceneit.MapConfig.NAME;
+        import static app.ie.sceneit.MapConfig.OK;
+        import static app.ie.sceneit.MapConfig.PLACE_ID;
+        import static app.ie.sceneit.MapConfig.PROXIMITY_RADIUS;
+        import static app.ie.sceneit.MapConfig.REFERENCE;
+        import static app.ie.sceneit.MapConfig.STATUS;
+        import static app.ie.sceneit.MapConfig.SUPERMARKET_ID;
+        import static app.ie.sceneit.MapConfig.VICINITY;
+        import static app.ie.sceneit.MapConfig.ZERO_RESULTS;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -29,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_REQUEST_CODE = 101;
 
     private FusedLocationProviderClient mFusedLocationClient;
+    private String TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +133,7 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
                     @Override
                     public void onSuccess(Location location) {
 
+
                         MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title("You are here");
                         mMap.addMarker(markerOptions);
 
@@ -118,10 +148,106 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
                         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                         if (location != null) {
-                            // Logic to handle location object
+                            onLocationChanged(location);
                         }
+
                     }
                 });
 
     }
+
+    private void loadNearByPlaces(double latitude, double longitude) {
+//YOU Can change this type at your own will, e.g hospital, cafe, restaurant.... and see how it all works
+        String type = "grocery_or_supermarket";
+        StringBuilder googlePlacesUrl =
+                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("location=").append(latitude).append(",").append(longitude);
+        googlePlacesUrl.append("&radius=").append(PROXIMITY_RADIUS);
+        googlePlacesUrl.append("&types=").append(type);
+        googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
+
+        JsonObjectRequest request = new JsonObjectRequest(googlePlacesUrl.toString(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject result) {
+
+                        Log.i(TAG, "onResponse: Result= " + result.toString());
+                        parseLocationResult(result);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "onErrorResponse: Error= " + error);
+                        Log.e(TAG, "onErrorResponse: Error= " + error.getMessage());
+                    }
+                });
+
+        MapController.getInstance().addToRequestQueue(request);
+    }
+
+    private void parseLocationResult(JSONObject result) {
+
+        String id, place_id, placeName = null, reference, icon, vicinity = null;
+        double latitude, longitude;
+
+        try {
+            JSONArray jsonArray = result.getJSONArray("results");
+
+            if (result.getString(STATUS).equalsIgnoreCase(OK)) {
+
+                mMap.clear();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject place = jsonArray.getJSONObject(i);
+
+                    id = place.getString(SUPERMARKET_ID);
+                    place_id = place.getString(PLACE_ID);
+                    if (!place.isNull(NAME)) {
+                        placeName = place.getString(NAME);
+                    }
+                    if (!place.isNull(VICINITY)) {
+                        vicinity = place.getString(VICINITY);
+                    }
+                    latitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
+                            .getDouble(LATITUDE);
+                    longitude = place.getJSONObject(GEOMETRY).getJSONObject(LOCATION)
+                            .getDouble(LONGITUDE);
+                    reference = place.getString(REFERENCE);
+                    icon = place.getString(ICON);
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    markerOptions.position(latLng);
+                    markerOptions.title(placeName + " : " + vicinity);
+
+                    mMap.addMarker(markerOptions);
+                }
+
+                Toast.makeText(getBaseContext(), jsonArray.length() + " Supermarkets found!",
+                        Toast.LENGTH_LONG).show();
+            } else if (result.getString(STATUS).equalsIgnoreCase(ZERO_RESULTS)) {
+                Toast.makeText(getBaseContext(), "No Supermarket found in 5KM radius!!!",
+                        Toast.LENGTH_LONG).show();
+            }
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public void onLocationChanged(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(latLng).title("My Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        loadNearByPlaces(latitude, longitude);
+    }
+
+
 }
