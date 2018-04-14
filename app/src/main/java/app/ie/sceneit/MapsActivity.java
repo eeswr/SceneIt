@@ -1,7 +1,9 @@
 package app.ie.sceneit;
 
+        import android.content.Context;
         import android.location.Criteria;
         import android.location.Location;
+        import android.location.LocationManager;
         import android.os.Bundle;
         import android.support.v4.app.ActivityCompat;
         import android.support.v4.app.FragmentActivity;
@@ -156,14 +158,14 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
 
     }
 
+    @SuppressWarnings("MissingPermission")
     private void loadNearByPlaces(double latitude, double longitude) {
 //YOU Can change this type at your own will, e.g hospital, cafe, restaurant.... and see how it all works
-        String type = "grocery_or_supermarket";
-        StringBuilder googlePlacesUrl =
-                new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=").append(latitude).append(",").append(longitude);
+        String type = "cinema";
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("keyword=").append(type);
+        googlePlacesUrl.append("&location=").append(latitude).append(",").append(longitude);
         googlePlacesUrl.append("&radius=").append(PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&types=").append(type);
         googlePlacesUrl.append("&sensor=true");
         googlePlacesUrl.append("&key=" + GOOGLE_BROWSER_API_KEY);
 
@@ -184,6 +186,26 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
                 });
 
         MapController.getInstance().addToRequestQueue(request);
+
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(15)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east
+                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+
+
     }
 
     private void parseLocationResult(JSONObject result) {
@@ -224,10 +246,10 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
                     mMap.addMarker(markerOptions);
                 }
 
-                Toast.makeText(getBaseContext(), jsonArray.length() + " Supermarkets found!",
+                Toast.makeText(getBaseContext(), jsonArray.length() + " cinemas found.",
                         Toast.LENGTH_LONG).show();
             } else if (result.getString(STATUS).equalsIgnoreCase(ZERO_RESULTS)) {
-                Toast.makeText(getBaseContext(), "No Supermarket found in 5KM radius!!!",
+                Toast.makeText(getBaseContext(), "No cinemas found in 30hm radius.",
                         Toast.LENGTH_LONG).show();
             }
 
