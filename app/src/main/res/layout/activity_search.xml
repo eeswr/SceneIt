@@ -16,24 +16,31 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.089" />
 
     <EditText
         android:id="@+id/filmText"
         style="@style/TextColor"
         android:layout_width="200dp"
         android:layout_height="46dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="92dp"
-        android:layout_marginTop="48dp"
-
         android:backgroundTint="@color/colorPrimaryDark"
         android:hint="Type name here"
         android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.178" />
 
     <Button
         android:id="@+id/searchButton"
@@ -44,39 +51,36 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_button"
         android:text="Search"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filmText" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="139dp"
-        android:paddingTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filmText"
+        app:layout_constraintVertical_bias="0.01" />
+
+    <ListView
+        android:id="@+id/filmList"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.805">
+        app:layout_constraintVertical_bias="0.872" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:indeterminate="true"
-            android:visibility="gone" />
+    <TextView
+        android:id="@+id/savePrompt"
+        style="@style/TextColor"
+        tools:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click on the film you want to save."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.394"
+        android:textSize="15sp"/>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true">
-
-            <TextView
-                android:id="@+id/responseView"
-                style="@style/TextColor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </ScrollView>
-    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

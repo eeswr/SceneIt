@@ -31,6 +31,7 @@ package app.ie.sceneit;
         import org.json.JSONObject;
 
         import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+        import static app.ie.sceneit.MapConfig.CINEMA_ID;
         import static app.ie.sceneit.MapConfig.GEOMETRY;
         import static app.ie.sceneit.MapConfig.GOOGLE_BROWSER_API_KEY;
         import static app.ie.sceneit.MapConfig.ICON;
@@ -45,7 +46,6 @@ package app.ie.sceneit;
         import static app.ie.sceneit.MapConfig.PROXIMITY_RADIUS;
         import static app.ie.sceneit.MapConfig.REFERENCE;
         import static app.ie.sceneit.MapConfig.STATUS;
-        import static app.ie.sceneit.MapConfig.SUPERMARKET_ID;
         import static app.ie.sceneit.MapConfig.VICINITY;
         import static app.ie.sceneit.MapConfig.ZERO_RESULTS;
 
@@ -223,7 +223,7 @@ mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessL
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject place = jsonArray.getJSONObject(i);
 
-                    id = place.getString(SUPERMARKET_ID);
+                    id = place.getString(CINEMA_ID);
                     place_id = place.getString(PLACE_ID);
                     if (!place.isNull(NAME)) {
                         placeName = place.getString(NAME);
