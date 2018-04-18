@@ -1,7 +1,11 @@
 package app.ie.sceneit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -9,13 +13,20 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -35,10 +46,11 @@ import static app.ie.sceneit.FilmConfig.TITLE;
 
 public class SearchActivity extends Activity {
 
-    TextView responseView;
     EditText filmText;
     ListView filmList;
     Context activityContext;
+    ArrayList<Movie> CurrentSearchResults;
+    private DatabaseReference mDatabase;
 
     static final String API_KEY = "b1d7abb033c99a90dd0af6fab8471e1c";
     static final String API_URL = "https://api.themoviedb.org/3/search/";
@@ -52,6 +64,10 @@ public class SearchActivity extends Activity {
         filmList = (ListView) findViewById(R.id.filmList);
         findViewById(R.id.savePrompt).setVisibility(View.GONE);
         activityContext = this;
+        CurrentSearchResults = new ArrayList<Movie>();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
 
         Button queryButton = (Button) findViewById(R.id.searchButton);
         queryButton.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +79,37 @@ public class SearchActivity extends Activity {
                 new RetrieveFeedTask().execute();
             }
         });
+
+        filmList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder saveDialog = new AlertDialog.Builder(SearchActivity.this);
+                // Setting Dialog Message
+                saveDialog.setMessage("Do you want to save this film?");
+
+                saveDialog.setPositiveButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                saveDialog.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Saving film", Toast.LENGTH_SHORT).show();
+                        Movie movie = CurrentSearchResults.get(position);
+
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        String movieId = mDatabase.child("movies").child(userId).push().getKey();
+                        mDatabase.child("movies").child(userId).child(movieId).setValue(movie.toMap());
+                        finish();
+                    }
+                });
+
+                // Showing Alert Message
+                saveDialog.show().getWindow().setLayout(850,450);;
+            }
+        });
+
     }
 
     public class RetrieveFeedTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
@@ -88,7 +135,8 @@ public class SearchActivity extends Activity {
                     JSONObject response = new JSONObject(responseString);
                     JSONArray resultList = response.getJSONArray("results");
 
-                    return getMovieListFromJSONArray(resultList);
+                    CurrentSearchResults = getMovieListFromJSONArray(resultList);
+                    return CurrentSearchResults;
                 } finally {
                     urlConnection.disconnect();
                 }
@@ -104,9 +152,7 @@ public class SearchActivity extends Activity {
         }
     }
 
-    public void parseFilmJSON(View view) {
 
-    }
 
     private ArrayList<Movie> getMovieListFromJSONArray(JSONArray jsonArray) {
 
@@ -122,16 +168,15 @@ public class SearchActivity extends Activity {
                     String title = movieJSON.getString("title");
                     String releaseDate = movieJSON.getString("release_date");
                     String overview = movieJSON.getString("overview");
-                    Bitmap poster = null;
 
                     String posterPath = movieJSON.getString("poster_path");
+                    String posterUrl = null;
 
                     if (posterPath != null) {
-                        URL posterUrl =  new URL ("https://image.tmdb.org/t/p/w154/"+movieJSON.getString("poster_path"));
-                        poster = BitmapFactory.decodeStream(posterUrl.openConnection().getInputStream());
+                        posterUrl = "https://image.tmdb.org/t/p/w154" + posterPath;
                     }
 
-                    movieList.add(new Movie(title, releaseDate, overview, poster));
+                    movieList.add(new Movie(title, releaseDate, overview, posterUrl));
 
                 }
 
@@ -142,5 +187,7 @@ public class SearchActivity extends Activity {
         }
         return movieList;
     }
+
+
 }
 

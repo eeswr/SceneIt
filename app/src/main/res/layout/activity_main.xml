@@ -54,7 +54,7 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:background="@drawable/rounded_button"
-        android:onClick="buttonClickSearch"
+        android:onClick="buttonClickView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.877"
         app:layout_constraintLeft_toLeftOf="parent"

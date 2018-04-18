@@ -1,33 +1,39 @@
 {
   "project_info": {
-    "project_number": "806513849204",
-    "project_id": "firebase-sceneit"
+    "project_number": "1031441125386",
+    "firebase_url": "https://scene-it-63001.firebaseio.com",
+    "project_id": "scene-it-63001",
+    "storage_bucket": "scene-it-63001.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:806513849204:android:4c84b21f877fbd89",
+        "mobilesdk_app_id": "1:1031441125386:android:50dba24beb10e8c2",
         "android_client_info": {
-          "package_name": "ie.app.sceneit"
+          "package_name": "app.ie.sceneit"
         }
       },
       "oauth_client": [
         {
-          "client_id": "806513849204-iu98c185e9cv6s6iooq4h00n6p7df9ug.apps.googleusercontent.com",
+          "client_id": "1031441125386-s9nc4fr278o88dqqs72cv0bss7ologsa.apps.googleusercontent.com",
           "client_type": 3
         },
         {
-          "client_id": "806513849204-lhiuac4698c7du748419jvfa94ng8sf1.apps.googleusercontent.com",
+          "client_id": "1031441125386-aghqag5rh87d2kk7jhusa4s4him7d5gp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ie.app.sceneit",
+            "package_name": "app.ie.sceneit",
             "certificate_hash": "11e1654ab55bfc4163bbc9529f5cb9fc9dc48146"
           }
+        },
+        {
+          "client_id": "1031441125386-fvp81b9t6dvahpen9a8vcubo1vv8amt6.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA25vxI45wXSqf7BrmMhGWPgGipwqp_MnE"
+          "current_key": "AIzaSyAd5V3h3NexJ4le04PehlZlxaoriNFzceg"
         }
       ],
       "services": {
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031441125386-s9nc4fr278o88dqqs72cv0bss7ologsa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

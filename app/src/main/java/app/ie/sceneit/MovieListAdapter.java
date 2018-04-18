@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 import app.ie.sceneit.R;
 
+import com.bumptech.glide.Glide;
+
 public class MovieListAdapter extends ArrayAdapter<Movie> {
 
     int vg;
@@ -46,11 +48,11 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
 
         try {
             txtTitle.setText(movie.title);
-            txtRelease.setText(movie.releaseDate);
+            txtRelease.setText(movie.release);
             txtOverview.setText(movie.overview);
 
-            if (movie.poster != null) {
-                imgFilm.setImageBitmap(movie.poster);
+            if (movie.posterUrl != null) {
+                Glide.with(context).load(movie.posterUrl).into(imgFilm);
             }
 
         } catch (Exception e) {
