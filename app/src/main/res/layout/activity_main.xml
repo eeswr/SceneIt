@@ -40,6 +40,7 @@
         android:id="@+id/button2"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:onClick="buttonClickCalendar"
         android:background="@drawable/rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.877"
